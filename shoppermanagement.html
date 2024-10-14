@@ -1,92 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Alpha Web Storefront</title>
-        
-        
-        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha Web Storefront</title>
 
-        <link rel="stylesheet" href="shoppermanagement.css">
+   
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="shoppermanagement.css">
 
-        
-    </head>
-    <body>
-        
-        <div class="banner">
-            <div class="banner-text">
-                <h1>Alpha Web Storefront</h1>
-                <nav class="menu" style="float: right;">
-                    <a href="homepage.html">Home</a>
-                    <a href="shoppingcart.html">Shopping Cart</a>
-                    <a href="shoppermanagement.html">Sign In</a>
-                    <a href="contact.html">Contact</a>
-                </nav>
-            </div>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="banner">
+        <div class="banner-text">
+            <h1>Alpha Web Storefront</h1>
+            <nav class="menu" style="float: right;">
+                <a href="homepage.html">Home</a>
+                <a href="shoppingcart.html">Shopping Cart</a>
+                <a href="shoppermanagement.html">Sign In</a>
+                <a href="contact.html">Contact</a>
+            </nav>
         </div>
+    </div>
 
+
+    <div class="container mt-5">
         <h1>Sign In Here</h1>
-        
-        
-        <div>
-            <form>
-                <div class="form-group row">
-                    <label for=firstName>First Name</label>
-                    <input id="firstName" class="form-control" placeholder="First Name" maxlength="25" data-ng-model="firstName" required>
-                </div>
-                <div class="form-group row">
-                    <label for=lastName>Last Name</label>
-                    <input id="lastName" class="form-control" placeholder="Last Name" maxlength="25" data-ng-model="lastName" required>
-                </div>  
-                <div class="form-group row">
-                    <label for=email>Email</label>
-                    <input id="email" class="form-control" placeholder="Email" maxlength="25" data-ng-model="email" required>
-                </div>  
-                <div class="form-group row">
-                    <label for=phoneNum>Phone Number</label>
-                    <input id="phoneNum" class="form-control" placeholder="Phone Number" maxlength="25" data-ng-model="phoneNum" required>
-                </div>
-                <div>
-                    <input id="submit" type="submit" class="btn btn-primary" value="Submit">
-                </div>  
-            </form>
-        </div>
 
-        <script>
-            function validateEmail(email) {
+        <form id="shopperForm">
+            <div class="form-group row">
+                <label for="firstName" class="col-sm-2 col-form-label">First Name</label>
+                <div class="col-sm-10">
+                    <input id="firstName" class="form-control" placeholder="First Name" maxlength="25" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="lastName" class="col-sm-2 col-form-label">Last Name</label>
+                <div class="col-sm-10">
+                    <input id="lastName" class="form-control" placeholder="Last Name" maxlength="25" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="email" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                    <input id="email" class="form-control" placeholder="Email" maxlength="25" type="email" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="phoneNum" class="col-sm-2 col-form-label">Phone Number</label>
+                <div class="col-sm-10">
+                    <input id="phoneNum" class="form-control" placeholder="Phone Number" maxlength="25" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-10 offset-sm-2">
+                    <input id="submit" type="submit" class="btn btn-primary" value="Submit">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function validateEmail(email) {
             const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return re.test(String(email).toLowerCase());
         }
 
         function collectFormData() {
-            const formData = {
+            return {
                 firstName: document.getElementById('firstName').value,
                 lastName: document.getElementById('lastName').value,
                 email: document.getElementById('email').value,
-                phoneNum: document.getElementById('phoneNum').value,
-                age: document.getElementById('age').value,
-                address: document.getElementById('address').value
+                phoneNum: document.getElementById('phoneNum').value
             };
-            return formData;
         }
 
         document.getElementById('shopperForm').addEventListener('submit', function (event) {
-            event.preventDefault(); 
+            event.preventDefault();
 
             const email = document.getElementById('email').value;
-            const age = document.getElementById('age').value;
 
             if (!validateEmail(email)) {
                 alert('Please enter a valid email address.');
-                return;
-            }
-
-            if (age <= 0) {
-                alert('Please enter a valid age.');
                 return;
             }
 
@@ -95,7 +94,12 @@
 
             alert('Form submitted successfully!');
         });
-        </script>
-        
-    </body>
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
 </html>
