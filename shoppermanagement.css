@@ -25,3 +25,24 @@ form {
     font-weight: bold;
     margin-top: 15px;
 }
+
+.banner {
+    padding: 20px 20px;
+    background-color: #333;
+    color: white;
+}
+
+.menu {
+    flex-direction: column;
+    gap: 10px;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background-color: #333;
+    padding: 10px;
+}
+
+.menu a {
+    padding: 10px;
+    border-bottom: 1px solid white;
+}
