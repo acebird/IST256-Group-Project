@@ -57,6 +57,44 @@
         </div>
 
         <script>
+            function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+        function collectFormData() {
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phoneNum: document.getElementById('phoneNum').value,
+                age: document.getElementById('age').value,
+                address: document.getElementById('address').value
+            };
+            return formData;
+        }
+
+        document.getElementById('shopperForm').addEventListener('submit', function (event) {
+            event.preventDefault(); 
+
+            const email = document.getElementById('email').value;
+            const age = document.getElementById('age').value;
+
+            if (!validateEmail(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            if (age <= 0) {
+                alert('Please enter a valid age.');
+                return;
+            }
+
+            const shopperData = collectFormData();
+            console.log('Form Data Submitted:', JSON.stringify(shopperData));
+
+            alert('Form submitted successfully!');
+        });
         </script>
         
     </body>
