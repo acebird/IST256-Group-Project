@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha Web Storefront</title>
+
+   
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="shoppermanagement.css">
+
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1>Create or Update a Product</h1>
+
+        <form id="productform">
+            <div class="form-group row">
+                <label for="productid" class="col-sm-2 col-form-label">Product ID</label>
+                <div class="col-sm-10">
+                    <input id="productid" class="form-control" placeholder="Product Id" maxlength="25" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="productdescription" class="col-sm-2 col-form-label">Product Description</label>
+                <div class="col-sm-10">
+                    <input id="productdescription" class="form-control" placeholder="Product Description" maxlength="4">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="productcategory" class="col-sm-2 col-form-label">Product Category</label>
+                <div class="col-sm-10">
+                    <input id="productcategory" class="form-control" placeholder="Product Category" maxlength="50" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="measure" class="col-sm-2 col-form-label">Product Unit of Measure</label>
+                <div class="col-sm-10">
+                    <input id="measure" class="form-control" placeholder="Unit of Measure" maxlength="25" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="productprice" class="col-sm-2 col-form-label">Product Price</label>
+                <div class="col-sm-10">
+                    <input id="productprice" class="form-control" placeholder="Product Price" maxlength="25" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="productweight" class="col-sm-2 col-form-label">Product Weight</label>
+                <div class="col-sm-10">
+                    <input id="productweight" class="form-control" placeholder="Product Weight" maxlength="25">
+                </div>
+            </div>
+        
+            <div class="form-group row">
+                <div class="col-sm-10 offset-sm-2">
+                    <input id="submit" type="submit" class="btn btn-primary" value="Submit">
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
