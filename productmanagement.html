@@ -62,7 +62,47 @@
         </form>
     </div>
     <script>
-        
+        document.getElementById('productform').addEventListener('submit', function (event) {
+            event.preventDefault();
+            
+            let productID = document.getElementById('productid').value;
+            if (!/^[a-zA-Z0-9]+$/.test(productID)) {
+                alert('Product ID must be alphanumeric.');
+                return;
+            }
+
+            let productDescription = document.getElementById('productdescription').value;
+            if (productDescription.length < 5 || productDescription.length > 50) {
+                alert('Product Description must be between 5 and 50 characters.');
+                return;
+            }
+
+            let productCategory = document.getElementById('productcategory').value;
+            if (productCategory === '') {
+                alert('Product Category is required.');
+                return;
+            }
+
+            let measure = document.getElementById('measure').value;
+            if (measure === '') {
+                alert('Unit of Measure is required.');
+                return;
+            }
+
+            let productPrice = document.getElementById('productprice').value;
+            if (isNaN(productPrice) || parseFloat(productPrice) <= 0) {
+                alert('Product Price must be a positive number.');
+                return;
+            }
+
+            let productWeight = document.getElementById('productweight').value;
+            if (productWeight !== '' && (isNaN(productWeight) || parseFloat(productWeight) <= 0)) {
+                alert('Product Weight must be a positive number.');
+                return;
+            }
+
+            alert('Form submitted successfully!');
+        });
     </script>
 </body>
 
