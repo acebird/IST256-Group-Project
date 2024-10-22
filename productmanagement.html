@@ -100,8 +100,18 @@
                 alert('Product Weight must be a positive number.');
                 return;
             }
-
             alert('Form submitted successfully!');
+
+            let productJSON = {
+                "ProductID" : productID,
+                "ProductDescription": productDescription,
+                "ProductCategory": productCategory,
+                "Measure": measure,
+                "ProductPrice": parseFloat(productPrice),
+                "ProductWeight": productWeight ? parseFloat(productWeight) : null
+            }
+
+            console.log(productJSON);
         });
     </script>
 </body>
