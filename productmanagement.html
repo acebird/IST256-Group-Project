@@ -9,7 +9,7 @@
    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="productmanagement.css">
-
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 
 <body>
@@ -111,7 +111,20 @@
                 "ProductWeight": productWeight ? parseFloat(productWeight) : null
             }
 
-            console.log(productJSON);
+            $.ajax({
+                url: 'http://localhost:3000/products', // JSON Server API endpoint
+                type: 'POST',
+                data: JSON.stringify(productJSON),
+                contentType: 'application/json',
+                success: function(response) {
+                    alert('Product saved successfully!');
+                    console.log(response);
+                },
+                error: function(error) {
+                    alert('Error saving product: ' + error.responseText);
+                    console.error('Error:', error);
+                }
+            })
         });
     </script>
 </body>
