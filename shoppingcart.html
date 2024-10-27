@@ -99,7 +99,6 @@
             }
             else {
                 //search by category
-                // Search for product by Category
                 $.ajax({
                         url: `http://localhost:3000/products?ProductCategory=${productCategory}`,
                         type: 'GET',
@@ -124,7 +123,7 @@
             else {
                 //search by price
                 $.ajax({
-                        url: `http://localhost:3000/products?ProductPrice_lte=${parseFloat(productPrice)}`, // Products with price less than or equal to the specified price
+                        url: `http://localhost:3000/products?ProductPrice_lte=${parseFloat(productPrice)}`, 
                         type: 'GET',
                         success: function(response) {
                             if (response.length > 0) {
@@ -138,9 +137,9 @@
                         }
                     });
             }
-            // If no search is triggered, display a message
+            //if no search is triggered, display message
             if (!isSearchTriggered) {
-                $('#searchResults').append('<div class="alert alert-info">Please enter at least one search criterion.</div>');
+                $('#searchResults').append('<div class="alert alert-info">Please enter at least one search term.</div>');
             }
 
         });
