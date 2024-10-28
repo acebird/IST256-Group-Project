@@ -87,3 +87,9 @@ h1 {
     font-size: 14px;
     margin-bottom: 10px;
 }
+.leftcol {
+    width:170px;
+    height:auto;
+    float:left;
+    background-color: antiquewhite;
+ }

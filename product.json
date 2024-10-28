@@ -1,0 +1,8 @@
+{
+    "ProductID" : "1",
+    "ProductDescription": "A pair of shoes",
+    "ProductCategory": "Clothes",
+    "Measure": "10",
+    "ProductPrice": "30",
+    "ProductWeight": "20"
+}
