@@ -72,6 +72,27 @@
         function clearForm() {
             document.getElementById('productform').reset();
         }
+         
+     
+    function performAjaxSearch(url, successMessage, noResultsMessage) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(response) {
+                if (response.length > 0) {
+                    response.forEach(product => displayProduct(product));
+                    displayResultsCount(response.length);
+                    $('#searchResults').append(`<div class="alert alert-success">${successMessage}</div>`);
+                    clearForm();
+                } else {
+                    $('#searchResults').append(`<div class="alert alert-warning">${noResultsMessage}</div>`);
+                }
+            },
+            error: function(error) {
+                alert('Error: ' + error.responseText);
+            }
+        });
+    }
 
         document.getElementById('productform').addEventListener('submit', function (event) {
             event.preventDefault();
