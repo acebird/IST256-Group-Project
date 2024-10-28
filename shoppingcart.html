@@ -65,6 +65,14 @@
             $('#searchResults').append(`<div class="alert alert-info"><strong>${product.ProductID}</strong>: ${product.ProductDescription} - ${product.ProductPrice}</div>`);
         }
 
+        function displayResultsCount(count) {
+            $('#searchResults').prepend(`<div class="alert alert-success">${count} result(s) found.</div>`);
+        }
+
+        function clearForm() {
+            document.getElementById('productform').reset();
+        }
+
         document.getElementById('productform').addEventListener('submit', function (event) {
             event.preventDefault();
             
@@ -81,6 +89,9 @@
                         success: function(response) {
                             if (response.length > 0) {
                                 displayProduct(response[0]);
+                                displayResultsCount(response.length);
+                                $('#searchResults').append('<div class="alert alert-success">Search completed successfully!</div>'); 
+                                clearForm();
                             } else {
                                 $('#searchResults').append('<div class="alert alert-warning">Product ID not found.</div>');
                             }
@@ -105,6 +116,9 @@
                         success: function(response) {
                             if (response.length > 0) {
                                 response.forEach(product => displayProduct(product));
+                                displayResultsCount(response.length);
+                                $('#searchResults').append('<div class="alert alert-success">Search completed successfully!</div>');
+                                clearForm();
                             } else {
                                 $('#searchResults').append('<div class="alert alert-warning">No products found in this category.</div>');
                             }
@@ -128,6 +142,9 @@
                         success: function(response) {
                             if (response.length > 0) {
                                 response.forEach(product => displayProduct(product));
+                                displayResultsCount(response.length);
+                                $('#searchResults').append('<div class="alert alert-success">Search completed successfully!</div>');
+                                clearForm();
                             } else {
                                 $('#searchResults').append('<div class="alert alert-warning">No products found within the specified price.</div>');
                             }
