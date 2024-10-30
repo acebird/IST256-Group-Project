@@ -8,7 +8,7 @@
 
    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="shoppermanagement.css">
+    <link rel="stylesheet" href="shoppingcart.css">
 
 </head>
 
@@ -22,8 +22,8 @@
                 <a href="homepage.html">Home</a>
                 <a href="shoppingcart.html">Shopping Cart</a>
                 <a href="shoppermanagement.html">Sign In</a>
-                <a href="contact.html">Contact</a>
                 <a href="shipping.html">Shipping Details</a>
+                <a href="productmanagement.html">Product Details</a>
             </nav>
         </div>
     </div>
@@ -78,27 +78,35 @@
             return re.test(String(email).toLowerCase());
         }
 
-        function collectFormData() {
-            return {
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
-                email: document.getElementById('email').value,
-                phoneNum: document.getElementById('phoneNum').value
-            };
-        }
-
         document.getElementById('shopperForm').addEventListener('submit', function (event) {
             event.preventDefault();
 
+            const name = document.getElementById('name').value;
+            const age = document.getElementById('age').value;
+            const address = document.getElementById('address').value;
             const email = document.getElementById('email').value;
+            const phone = document.getElementById('phoneNum').value;
+    
 
             if (!validateEmail(email)) {
                 alert('Please enter a valid email address.');
                 return;
             }
 
-            const shopperData = collectFormData();
+            let shopperData = {
+                "Name" : name,
+                "Age": parseFloat(age),
+                "Address": address,
+                "Email": email,
+                "Phone": phone,
+            }
             console.log('Form Data Submitted:', JSON.stringify(shopperData));
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'C:/Users/acebi/Documents/GitHub/IST256-Group-Project/user.json', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            xhr.send(shopperData);
 
             alert('Form submitted successfully!');
         });
