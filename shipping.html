@@ -30,23 +30,23 @@
         <div class="container mt-5">
             <h1>Add to Shopping Cart</h1>
     
-            <form id="productform">
+            <form id="shippingform">
                 <div class="form-group row">
-                    <label for="productid" class="col-sm-2 col-form-label">Shipping Destination: </label>
+                    <label for="shippingdest" class="col-sm-2 col-form-label">Shipping Destination: </label>
                     <div class="col-sm-10">
-                        <input id="productid" class="form-control" placeholder="Product Id" maxlength="25">
+                        <input id="shipdest" class="form-control" placeholder="Shipping Destination" maxlength="25">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="productcategory" class="col-sm-2 col-form-label">Shipping Carrier: </label>
+                    <label for="shipcarrier" class="col-sm-2 col-form-label">Shipping Carrier: </label>
                     <div class="col-sm-10">
-                        <input id="productcategory" class="form-control" placeholder="Product Category" maxlength="50">
+                        <input id="shipcarrier" class="form-control" placeholder="Shipping Carrier" maxlength="50">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="productprice" class="col-sm-2 col-form-label">Shipping Method: </label>
+                    <label for="shipmethod" class="col-sm-2 col-form-label">Shipping Method: </label>
                     <div class="col-sm-10">
-                        <input id="productprice" class="form-control" placeholder="Product Price" maxlength="25">
+                        <input id="shipmethod" class="form-control" placeholder="Shipping Method" maxlength="25">
                     </div>
                 </div>
             
@@ -59,5 +59,29 @@
             <div id="searchResults"></div>
         </div>
 
+
+        <script>
+            document.getElementById('shippingform').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                let shipdest = document.getElementById('shipdest').value;
+                if (shipdest.length < 5 || shipdest.length > 50) {
+                    alert('Product Description must be between 5 and 50 characters.');
+                    return;
+                }
+                let shipcarrier = document.getElementById('shipcarrier').value;
+                if (shipcarrier.length < 5 || shipcarrier.length > 50) {
+                    alert('Product Description must be between 5 and 50 characters.');
+                    return;
+                }
+
+                let shipmethod = document.getElementById('shipmethod').value;
+                if (shipmethod.length < 5 || shipmethod.length > 50) {
+                    alert('Product Description must be between 5 and 50 characters.');
+                    return;
+                }
+                alert('Form submitted successfully!');
+            });
+        </script>
     </body>
 </html>
