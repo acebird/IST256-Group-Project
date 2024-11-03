@@ -56,7 +56,8 @@
                     </div>
                 </div>
             </form>
-            <div id="searchResults"></div>
+             <input type="text" id="searchInput" placeholder="Search Products" class="form-control mt-3">
+            <div id="searchResults" class="mt-3"></div>
         </div>
 
 
@@ -81,6 +82,26 @@
                     return;
                 }
                 alert('Form submitted successfully!');
+            });
+
+            // Replace the `products` array below with the actual JSON data here
+            const products = [
+                { id: 1, name: "Product A", price: 25.99 },
+                { id: 2, name: "Product B", price: 15.99 },
+                { id: 3, name: "Product C", price: 35.99 }
+            ];
+
+            $(document).ready(function() {
+                $('#searchInput').on('input', function() {
+                    const searchQuery = $(this).val().toLowerCase();
+                    const results = products.filter(product => product.name.toLowerCase().includes(searchQuery));
+
+                    // Display results in the #searchResults div
+                    $('#searchResults').empty();
+                    results.forEach(product => {
+                        $('#searchResults').append(`<p>${product.name} - $${product.price}</p>`);
+                    });
+                });
             });
         </script>
     </body>
