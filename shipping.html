@@ -103,6 +103,18 @@
                     });
                 });
             });
+            $.ajax({
+                url: '',
+                type: 'POST',
+                data: JSON.stringify({ updatedProducts: products }),
+                contentType: 'application/json',
+                success: function(response) {
+                    console.log("Data successfully sent to server:", response);
+                },
+                error: function(error) {
+                    console.error("Error sending data:", error);
+                }
+            });
         </script>
     </body>
 </html>
