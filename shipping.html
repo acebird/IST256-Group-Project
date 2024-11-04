@@ -102,19 +102,16 @@
                         $('#searchResults').append(`<p>${product.name} - $${product.price}</p>`);
                     });
                 });
+                
             });
-            $.ajax({
-                url: '',
-                type: 'POST',
-                data: JSON.stringify({ updatedProducts: products }),
-                contentType: 'application/json',
-                success: function(response) {
-                    console.log("Data successfully sent to server:", response);
-                },
-                error: function(error) {
-                    console.error("Error sending data:", error);
-                }
-            });
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'C:/Users/acebi/Documents/GitHub/IST256-Group-Project/db.json', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            xhr.send(productJSON);
+
+            alert('Form submitted successfully!');
+            
         </script>
     </body>
 </html>
