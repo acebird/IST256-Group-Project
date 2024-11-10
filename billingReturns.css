@@ -11,7 +11,6 @@ body {
     color: #333;
 }
 
-/* Container Styling */
 .container {
     width: 80%;
     max-width: 800px;
@@ -22,17 +21,15 @@ body {
     border-radius: 8px;
 }
 
-/* Section Headers */
 h2 {
     font-size: 1.8em;
-    color: #0073e6;
+    color: #000;
     margin-bottom: 20px;
     text-align: center;
-    border-bottom: 2px solid #0073e6;
+    border-bottom: 2px solid #000; 
     padding-bottom: 10px;
 }
 
-/* Form Styling */
 .form-group {
     margin-bottom: 15px;
 }
@@ -56,7 +53,6 @@ input[type="text"]:focus {
     outline: none;
 }
 
-/* Button Styling */
 .btn-primary {
     background-color: #0073e6;
     color: #fff;
@@ -72,7 +68,6 @@ input[type="text"]:focus {
     background-color: #005bb5;
 }
 
-/* Product Search */
 #product-list {
     margin-top: 20px;
     padding: 10px;
@@ -80,10 +75,8 @@ input[type="text"]:focus {
     color: #555;
 }
 
-/* Row Styling */
 .row {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
-
