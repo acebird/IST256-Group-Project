@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Billing Details and Returns</title>
     
-    <!-- Add CSS-->
+    <!--add CSS-->
 </head>
 <body>
 
@@ -14,17 +14,22 @@
         <div id="billing">
             <h2>Billing Details</h2>
             <form id="billingForm">
-                <div class="form-group">
+                <div class="form-group row">
                     <label for="name">Full Name:</label>
                     <input type="text" class="form-control" id="name"required>
                 </div>
-                <div class="form-group">
+                <div class="form-group row">
                     <label for="address">Address:</label>
                     <input type="text" class="form-control" id="address"required>
                 </div>
-                <div class="form-group">
+                <div class="form-group row">
                     <label for="state">State:</label>
                     <input type="text" class="form-control" id="state"required>
+                </div>
+                <div class="form-group row">
+                    <div>
+                        <input id="submit" type="submit" class="btn btn-primary" value="Submit">
+                    </div>
                 </div>
             </form>
         </div>
