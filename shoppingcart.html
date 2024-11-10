@@ -21,12 +21,18 @@
                     <a href="homepage.html">Home</a>
                     <a href="shoppingcart.html">Shopping Cart</a>
                     <a href="shoppermanagement.html">Sign In</a>
-                    <a href="contact.html">Contact</a>
+                    <a href="shipping.html">Shipping Details</a>
+                    <a href="productmanagement.html">Product Details</a>
                 </nav>
             </div>
         </div>
 
-        <h1>Shopping Cart</h1>
+        <div class="leftcol">
+            <h3>Cart</h3>
+            <ul>
+                <li id="item"></li>
+            </ul>
+        </div>
 
         <div class="container mt-5">
             <h1>Add to Shopping Cart</h1>
@@ -65,6 +71,35 @@
             $('#searchResults').append(`<div class="alert alert-info"><strong>${product.ProductID}</strong>: ${product.ProductDescription} - ${product.ProductPrice}</div>`);
         }
 
+        function displayResultsCount(count) {
+            $('#searchResults').prepend(`<div class="alert alert-success">${count} result(s) found.</div>`);
+        }
+
+        function clearForm() {
+            document.getElementById('productform').reset();
+        }
+         
+     
+    function performAjaxSearch(url, successMessage, noResultsMessage) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(response) {
+                if (response.length > 0) {
+                    response.forEach(product => displayProduct(product));
+                    displayResultsCount(response.length);
+                    $('#searchResults').append(`<div class="alert alert-success">${successMessage}</div>`);
+                    clearForm();
+                } else {
+                    $('#searchResults').append(`<div class="alert alert-warning">${noResultsMessage}</div>`);
+                }
+            },
+            error: function(error) {
+                alert('Error: ' + error.responseText);
+            }
+        });
+    }
+
         document.getElementById('productform').addEventListener('submit', function (event) {
             event.preventDefault();
             
@@ -81,6 +116,9 @@
                         success: function(response) {
                             if (response.length > 0) {
                                 displayProduct(response[0]);
+                                displayResultsCount(response.length);
+                                $('#searchResults').append('<div class="alert alert-success">Search completed successfully!</div>'); 
+                                clearForm();
                             } else {
                                 $('#searchResults').append('<div class="alert alert-warning">Product ID not found.</div>');
                             }
@@ -99,13 +137,15 @@
             }
             else {
                 //search by category
-                // Search for product by Category
                 $.ajax({
                         url: `http://localhost:3000/products?ProductCategory=${productCategory}`,
                         type: 'GET',
                         success: function(response) {
                             if (response.length > 0) {
                                 response.forEach(product => displayProduct(product));
+                                displayResultsCount(response.length);
+                                $('#searchResults').append('<div class="alert alert-success">Search completed successfully!</div>');
+                                clearForm();
                             } else {
                                 $('#searchResults').append('<div class="alert alert-warning">No products found in this category.</div>');
                             }
@@ -124,11 +164,14 @@
             else {
                 //search by price
                 $.ajax({
-                        url: `http://localhost:3000/products?ProductPrice_lte=${parseFloat(productPrice)}`, // Products with price less than or equal to the specified price
+                        url: `http://localhost:3000/products?ProductPrice_lte=${parseFloat(productPrice)}`, 
                         type: 'GET',
                         success: function(response) {
                             if (response.length > 0) {
                                 response.forEach(product => displayProduct(product));
+                                displayResultsCount(response.length);
+                                $('#searchResults').append('<div class="alert alert-success">Search completed successfully!</div>');
+                                clearForm();
                             } else {
                                 $('#searchResults').append('<div class="alert alert-warning">No products found within the specified price.</div>');
                             }
@@ -138,9 +181,9 @@
                         }
                     });
             }
-            // If no search is triggered, display a message
+            //if no search is triggered, display message
             if (!isSearchTriggered) {
-                $('#searchResults').append('<div class="alert alert-info">Please enter at least one search criterion.</div>');
+                $('#searchResults').append('<div class="alert alert-info">Please enter at least one search term.</div>');
             }
 
         });

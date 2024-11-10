@@ -1,0 +1,43 @@
+[
+    {
+        "ProductID" : "1",
+        "ProductDescription": "A pair of shoes",
+        "ProductCategory": "Clothes",
+        "Measure": "10",
+        "ProductPrice": "30",
+        "ProductWeight": "20"
+    },
+    {
+        "ProductID" : "2",
+        "ProductDescription": "Shirt",
+        "ProductCategory": "Clothes",
+        "Measure": "10",
+        "ProductPrice": "30",
+        "ProductWeight": "20"
+    },
+    {
+        "ProductID" : "3",
+        "ProductDescription": "Basketball",
+        "ProductCategory": "Sports",
+        "Measure": "10",
+        "ProductPrice": "30",
+        "ProductWeight": "20"
+    },
+    {
+        "ProductID" : "4",
+        "ProductDescription": "Scissors",
+        "ProductCategory": "Office",
+        "Measure": "10",
+        "ProductPrice": "30",
+        "ProductWeight": "20"
+    },
+    {
+        "ProductID" : "5",
+        "ProductDescription": "Binder",
+        "ProductCategory": "Office",
+        "Measure": "10",
+        "ProductPrice": "30",
+        "ProductWeight": "20"
+    }
+
+]
