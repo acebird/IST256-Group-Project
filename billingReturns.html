@@ -7,44 +7,24 @@
     
     <!--add CSS-->
     <link rel="stylesheet" href="billingReturns.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 </head>
 <body>
 
-    <script>
-        document.getElementById("billingForm").addEventListener("submit", function (event) {
-            event.preventDefault(); 
-            const name = document.getElementById("name").value.trim();
-            const address = document.getElementById("address").value.trim();
-            const state = document.getElementById("state").value.trim();
-            
-            if (name === "" || address === "" || state === "") {
-                alert("Please fill out all required fields.");
-            } else {
-                alert("Billing details submitted successfully!");
-            }
-        });
-
-        document.getElementById("search").addEventListener("input", function () {
-            const query = this.value.trim().toLowerCase();
-            const productList = document.getElementById("product-list");
-
-            const products = ["Laptop", "Tablet", "Smartphone", "Headphones", "Charger", "Keyboard"];
-
-            const filteredProducts = products.filter(product => product.toLowerCase().includes(query));
-
-            productList.innerHTML = ""; 
-            if (filteredProducts.length > 0) {
-                filteredProducts.forEach(product => {
-                    const item = document.createElement("div");
-                    item.textContent = product;
-                    item.classList.add("product-item");
-                    productList.appendChild(item);
-                });
-            } else {
-                productList.textContent = "No products found.";
-            }
-        });
-    </script>
+    <div class="banner">
+        <div class="banner-text">
+            <h1>Alpha Web Storefront</h1>
+            <nav class="menu" style="float: right;">
+                <a href="homepage.html">Home</a>
+                <a href="shoppingcart.html">Shopping Cart</a>
+                <a href="shoppermanagement.html">Sign In</a>
+                <a href="shipping.html">Shipping Details</a>
+                <a href="productmanagement.html">Product Details</a>
+                <a href="billingReturns.html">Billing/Returns</a>
+            </nav>
+        </div>
+    </div>
 
 
     <div class="container">
@@ -88,6 +68,40 @@
     
 
     <!--add scripts-->
-    
+    <script>
+        document.getElementById("billingForm").addEventListener("submit", function (event) {
+            event.preventDefault(); 
+            const name = document.getElementById("name").value.trim();
+            const address = document.getElementById("address").value.trim();
+            const state = document.getElementById("state").value.trim();
+            
+            if (name === "" || address === "" || state === "") {
+                alert("Please fill out all required fields.");
+            } else {
+                alert("Billing details submitted successfully!");
+            }
+        });
+
+        document.getElementById("search").addEventListener("input", function () {
+            const query = this.value.trim().toLowerCase();
+            const productList = document.getElementById("product-list");
+
+            const products = ["Laptop", "Tablet", "Smartphone", "Headphones", "Charger", "Keyboard"];
+
+            const filteredProducts = products.filter(product => product.toLowerCase().includes(query));
+
+            productList.innerHTML = ""; 
+            if (filteredProducts.length > 0) {
+                filteredProducts.forEach(product => {
+                    const item = document.createElement("div");
+                    item.textContent = product;
+                    item.classList.add("product-item");
+                    productList.appendChild(item);
+                });
+            } else {
+                productList.textContent = "No products found.";
+            }
+        });
+    </script>
 </body>
 </html>
