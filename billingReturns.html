@@ -12,6 +12,42 @@
 </head>
 <body>
 
+    <script>
+        document.getElementById("billingForm").addEventListener("submit", function (event) {
+            event.preventDefault(); 
+            const name = document.getElementById("name").value.trim();
+            const address = document.getElementById("address").value.trim();
+            const state = document.getElementById("state").value.trim();
+            
+            if (name === "" || address === "" || state === "") {
+                alert("Please fill out all required fields.");
+            } else {
+                alert("Billing details submitted successfully!");
+            }
+        });
+
+        document.getElementById("search").addEventListener("input", function () {
+            const query = this.value.trim().toLowerCase();
+            const productList = document.getElementById("product-list");
+
+            const products = ["Laptop", "Tablet", "Smartphone", "Headphones", "Charger", "Keyboard"];
+
+            const filteredProducts = products.filter(product => product.toLowerCase().includes(query));
+
+            productList.innerHTML = ""; 
+            if (filteredProducts.length > 0) {
+                filteredProducts.forEach(product => {
+                    const item = document.createElement("div");
+                    item.textContent = product;
+                    item.classList.add("product-item");
+                    productList.appendChild(item);
+                });
+            } else {
+                productList.textContent = "No products found.";
+            }
+        });
+    </script>
+
     <div class="banner">
         <div class="banner-text">
             <h1>Alpha Web Storefront</h1>
