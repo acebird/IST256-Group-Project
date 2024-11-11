@@ -45,6 +45,15 @@
 
     <!-- JavaScript -->
     <script>
+        let productData = []; 
+		
+        fetch('returnedProducts.json')
+            .then(response => response.json())
+            .then(data => {
+                productData = data.products; 
+            })
+            .catch(error => console.error("ERROR LOADING JSON DATA:", error));
+        
         document.addEventListener("DOMContentLoaded", function() {
             // Billing form submission
             document.getElementById("billingForm").addEventListener("submit", function (event) {
