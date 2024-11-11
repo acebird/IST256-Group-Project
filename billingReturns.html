@@ -127,6 +127,7 @@
                 }
             });
 
+<<<<<<< HEAD
 
 
         var app = angular.module('myApp', []);
@@ -156,6 +157,23 @@
                 const dbo = client.db("AlphaWeb");
                 const myobj = { productData };
 
+=======
+	$("#search").on("input", function () {
+                const query = $(this).val().trim().toLowerCase();
+                const $productList = $("#product-list");
+                $productList.empty();
+	const filteredProducts = productData.filter(product => 
+                    product.name.toLowerCase().includes(query)
+                );
+	if (filteredProducts.length > 0) {
+                    filteredProducts.forEach(product => {
+                        const $item = $("<div>").text(product.name).addClass("product-item");
+                        $productList.append($item);
+                    });
+                } else {
+                    $productList.text("No products found.");
+                }
+>>>>>>> eca0da268bd2932ba907ca2514da6d398b27812f
 
                 const result = await dbo.collection("Shopper").insertOne(myobj);
                 console.log("1 document inserted", result);
