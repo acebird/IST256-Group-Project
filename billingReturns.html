@@ -1,13 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-App="myApp">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Billing Details and Returns</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="billingReturns.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 </head>
-<body>
+<body ng-controller="myController">
+
+    <div class="banner">
+        <div class="banner-text">
+            <h1>Alpha Web Storefront</h1>
+            <nav class="menu" style="float: right;">
+                <a href="homepage.html">Home</a>
+                <a href="shoppingcart.html">Shopping Cart</a>
+                <a href="shoppermanagement.html">Sign In</a>
+                <a href="shipping.html">Shipping Details</a>
+                <a href="productmanagement.html">Product Details</a>
+                <a href="billingReturns.html">Billing/Returns</a>
+            </nav>
+        </div>
+    </div>
 
     <div class="container my-5">
         <div class="row">
@@ -53,7 +71,7 @@
                 productData = data.products; 
             })
             .catch(error => console.error("ERROR LOADING JSON DATA:", error));
-        
+
         document.addEventListener("DOMContentLoaded", function() {
             // Billing form submission
             document.getElementById("billingForm").addEventListener("submit", function (event) {
@@ -67,6 +85,25 @@
                 } else {
                     alert("Billing details submitted successfully!");
                 }
+
+                let billingData = {
+                "Name" : name,
+                "Address": address,
+                "State": state,
+                }
+
+
+                $(document).ready(function() {
+                var xhr = new XMLHttpRequest();
+                    xhr.open('POST', 'C:/Users/acebi/Documents/GitHub/IST256-Group-Project/product.json', true);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+
+                    xhr.send(billingData);
+
+                    alert('Form submitted successfully!');
+                });
+
+
             });
 
             // Product search
@@ -89,33 +126,51 @@
                     productList.textContent = "No products found.";
                 }
             });
-        });
 
 
 
+        var app = angular.module('myApp', []);
+            app.controller('MyController', function($scope, $http) {
+                var apiUrl = "C:/Users/acebi/Documents/GitHub/IST256-Group-Project/user.json";
+                
+                $scope.getData = function() {
+                    $http.get(apiUrl)
+                        .then(function(response) {
+                            $scope.data = response.data;
+                        });
+                };
+                $scope.getData();
+            });
+
+        
+        const { MongoClient } = require('mongodb');
+        const url = "mongodb://127.0.0.1:27017/";
+
+        async function insertDocument() {
+            const client = new MongoClient(url);
+
+            try {
+
+                await client.connect();
+
+                const dbo = client.db("AlphaWeb");
+                const myobj = { productData };
 
 
-        $(document).ready(function() {
-        var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'C:/Users/acebi/Documents/GitHub/IST256-Group-Project/product.json', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
+                const result = await dbo.collection("Shopper").insertOne(myobj);
+                console.log("1 document inserted", result);
 
-            xhr.send(productJSON);
+            } catch (err) {
+                console.error("Error connecting to MongoDB:", err);
+            } finally {
 
-            alert('Form submitted successfully!');
-        });
+                await client.close();
+            }
+        }
+
+        insertDocument();
+    });
     </script>
-
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-
-
-
-
-
-
-
 </body>
 </html>
 
