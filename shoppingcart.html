@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -68,126 +69,66 @@
         </div>
 
         <script>
-        function displayProduct(product) {
-            $('#searchResults').append(`<div class="alert alert-info"><strong>${product.ProductID}</strong>: ${product.ProductDescription} - ${product.ProductPrice}</div>`);
-        }
-
-        function displayResultsCount(count) {
-            $('#searchResults').prepend(`<div class="alert alert-success">${count} result(s) found.</div>`);
-        }
-
-        function clearForm() {
-            document.getElementById('productform').reset();
-        }
-         
-     
-    function performAjaxSearch(url, successMessage, noResultsMessage) {
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function(response) {
-                if (response.length > 0) {
-                    response.forEach(product => displayProduct(product));
-                    displayResultsCount(response.length);
-                    $('#searchResults').append(`<div class="alert alert-success">${successMessage}</div>`);
-                    clearForm();
-                } else {
-                    $('#searchResults').append(`<div class="alert alert-warning">${noResultsMessage}</div>`);
+            function addToCart(product) {
+                const cartList = document.querySelector('.leftcol ul');
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `<strong>${product.ProductID}</strong>: ${product.ProductDescription}, <em>Category:</em> ${product.ProductCategory}, <em>Price:</em> $${product.ProductPrice}`;
+                cartList.appendChild(listItem);
+            }
+        
+            function clearForm() {
+                document.getElementById('productform').reset();
+            }
+        
+            document.getElementById('productform').addEventListener('submit', function (event) {
+                event.preventDefault();
+        
+                let productID = document.getElementById('productid').value.trim();
+                let productCategory = document.getElementById('productcategory').value.trim();
+                let productPrice = document.getElementById('productprice').value.trim();
+        
+                if (productID && !/^[a-zA-Z0-9]+$/.test(productID)) {
+                    alert('Product ID must be alphanumeric.');
+                    return;
                 }
-            },
-            error: function(error) {
-                alert('Error: ' + error.responseText);
-            }
-        });
-    }
-
-        document.getElementById('productform').addEventListener('submit', function (event) {
-            event.preventDefault();
-            
-            let productID = document.getElementById('productid').value;
-            if (!/^[a-zA-Z0-9]+$/.test(productID)) {
-                alert('Product ID must be alphanumeric.');
-                return;
-            }
-            else {
-                //search for product by ID
+        
+                if (productPrice && (isNaN(productPrice) || parseFloat(productPrice) <= 0)) {
+                    alert('Product Price must be a positive number.');
+                    return;
+                }
+        
+                if (!productID && !productCategory && !productPrice) {
+                    alert('Please enter at least one search term.');
+                    return;
+                }
+        
                 $.ajax({
-                        url: `http://localhost:3000/products?ProductID=${productID}`,
-                        type: 'GET',
-                        success: function(response) {
-                            if (response.length > 0) {
-                                displayProduct(response[0]);
-                                displayResultsCount(response.length);
-                                $('#searchResults').append('<div class="alert alert-success">Search completed successfully!</div>'); 
-                                clearForm();
-                            } else {
-                                $('#searchResults').append('<div class="alert alert-warning">Product ID not found.</div>');
-                            }
-                        },
-                        error: function(error) {
-                            alert('Error searching for Product ID: ' + error.responseText);
+                    url: 'http://localhost:3000/product.json', 
+                    type: 'GET',
+                    success: function (response) {
+                        let results = response.filter(product => {
+                            return (
+                                (!productID || product.ProductID == productID) &&
+                                (!productCategory || product.ProductCategory.toLowerCase() == productCategory.toLowerCase()) &&
+                                (!productPrice || parseFloat(product.ProductPrice) <= parseFloat(productPrice))
+                            );
+                        });
+        
+                        if (results.length > 0) {
+                            results.forEach(product => addToCart(product));
+                        } else {
+                            alert('No matching products found.');
                         }
-                    });
-
-            }
-
-            let productCategory = document.getElementById('productcategory').value;
-            if (productCategory === '') {
-                alert('Product Category is required.');
-                return;
-            }
-            else {
-                //search by category
-                $.ajax({
-                        url: `http://localhost:3000/products?ProductCategory=${productCategory}`,
-                        type: 'GET',
-                        success: function(response) {
-                            if (response.length > 0) {
-                                response.forEach(product => displayProduct(product));
-                                displayResultsCount(response.length);
-                                $('#searchResults').append('<div class="alert alert-success">Search completed successfully!</div>');
-                                clearForm();
-                            } else {
-                                $('#searchResults').append('<div class="alert alert-warning">No products found in this category.</div>');
-                            }
-                        },
-                        error: function(error) {
-                            alert('Error searching for Product Category: ' + error.responseText);
-                        }
-                    });
-            }
-
-            let productPrice = document.getElementById('productprice').value;
-            if (isNaN(productPrice) || parseFloat(productPrice) <= 0) {
-                alert('Product Price must be a positive number.');
-                return;
-            }
-            else {
-                //search by price
-                $.ajax({
-                        url: `http://localhost:3000/products?ProductPrice_lte=${parseFloat(productPrice)}`, 
-                        type: 'GET',
-                        success: function(response) {
-                            if (response.length > 0) {
-                                response.forEach(product => displayProduct(product));
-                                displayResultsCount(response.length);
-                                $('#searchResults').append('<div class="alert alert-success">Search completed successfully!</div>');
-                                clearForm();
-                            } else {
-                                $('#searchResults').append('<div class="alert alert-warning">No products found within the specified price.</div>');
-                            }
-                        },
-                        error: function(error) {
-                            alert('Error searching for Product Price: ' + error.responseText);
-                        }
-                    });
-            }
-            //if no search is triggered, display message
-            if (!isSearchTriggered) {
-                $('#searchResults').append('<div class="alert alert-info">Please enter at least one search term.</div>');
-            }
-
-        });
+        
+                        clearForm();
+                    },
+                    error: function (error) {
+                        alert('Error fetching product data: ' + error.responseText);
+                    }
+                });
+            });
         </script>
+        
+        
     </body>
 </html>
