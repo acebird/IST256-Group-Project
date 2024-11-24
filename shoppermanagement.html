@@ -5,14 +5,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alpha Web Storefront</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"></script>
+
 
    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="shoppingcart.css">
-
+    
 </head>
 
-<body>
+<body data-ng-app>
 
     <!-- Navbar -->
     <div class="banner">
@@ -33,90 +36,104 @@
     <div class="container mt-5">
         <h1>Sign In Here</h1>
 
-        <form id="shopperForm">
+        <form data-ng-submit="submit()" data-ng-controller="Ctrl">
+
             <div class="form-group row">
                 <label for="name" class="col-sm-2 col-form-label">Name</label>
                 <div class="col-sm-10">
-                    <input id="name" class="form-control" placeholder="Name" maxlength="25" required>
+                    <input id="name" class="form-control" placeholder="Name" maxlength="25" required data-ng-model="name">
                 </div>
             </div>
+            
             <div class="form-group row">
                 <label for="age" class="col-sm-2 col-form-label">Age</label>
                 <div class="col-sm-10">
-                    <input id="age" class="form-control" placeholder="Age" maxlength="4">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="address" class="col-sm-2 col-form-label">Address</label>
-                <div class="col-sm-10">
-                    <input id="address" class="form-control" placeholder="Address" maxlength="50" required>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="email" class="col-sm-2 col-form-label">Email</label>
-                <div class="col-sm-10">
-                    <input id="email" class="form-control" placeholder="Email" maxlength="25" type="email" required>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="phoneNum" class="col-sm-2 col-form-label">Phone Number</label>
-                <div class="col-sm-10">
-                    <input id="phoneNum" class="form-control" placeholder="Phone Number" maxlength="25">
+                    <input id="age" class="form-control" placeholder="Age" maxlength="4" data-ng-model="age">
                 </div>
             </div>
         
+            <div class="form-group row">
+                <label for="address" class="col-sm-2 col-form-label">Address</label>
+                <div class="col-sm-10">
+                    <input id="address" class="form-control" placeholder="Address" maxlength="50" required data-ng-model="address">
+                </div>
+            </div>
+            
+
+            <div class="form-group row">
+                <label for="email" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                    <input id="email" class="form-control" placeholder="Email" maxlength="25" type="email" required data-ng-model="email">
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label for="phoneNum" class="col-sm-2 col-form-label">Phone Number</label>
+                <div class="col-sm-10">
+                    <input id="phoneNum" class="form-control" placeholder="Phone Number" maxlength="25" data-ng-model="phoneNum">
+                </div>
+            </div>
+            
             <div class="form-group row">
                 <div class="col-sm-10 offset-sm-2">
                     <input id="submit" type="submit" class="btn btn-primary" value="Submit">
                 </div>
             </div>
         </form>
+        
+        <p>Request: {{ request }}</p>
     </div>
 
-    <script>
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(String(email).toLowerCase());
-        }
+</body>
 
-        document.getElementById('shopperForm').addEventListener('submit', function (event) {
-            event.preventDefault();
+<script type="text/javascript">
+    function Ctrl($scope){
+        $scope.submit = function () {
+            // Make sure to change the host and port to match the URL
+            var query = "http://localhost:3000/Create?";
 
-            const name = document.getElementById('name').value;
-            const age = document.getElementById('age').value;
-            const address = document.getElementById('address').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phoneNum').value;
-    
-
-            if (!validateEmail(email)) {
-                alert('Please enter a valid email address.');
+            //input validation
+            if(!validateEmail($scope.email)){
+                alert('Please enter valid email address.');
                 return;
             }
 
-            let shopperData = {
-                "Name" : name,
-                "Age": parseFloat(age),
-                "Address": address,
-                "Email": email,
-                "Phone": phone,
+            if (!$scope.name && !$scope.age && !$scope.address && !$scope.email && !$scope.phoneNum) {
+                alert('Please provide at least one input field.');
+                return;
             }
-            console.log('Form Data Submitted:', JSON.stringify(shopperData));
 
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'C:/Users/acebi/Documents/GitHub/IST256-Group-Project/user.json', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
 
-            xhr.send(shopperData);
+            query += "name=" + $scope.name;
+            query += "&age=" + $scope.age;
+            query += "&address=" + $scope.address;
+            query += "&email=" + $scope.email;
+            query += "&phoneNum=" + $scope.phoneNum;
 
-            alert('Form submitted successfully!');
-        });
-    </script>
+            $scope.request = query;
+            $scope.$apply();
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            $.ajax({ url: query, crossDomain: true, dataType: 'json', type: 'GET'})
+                .done(function (json) {
+                    $scope.response = json.result;
+                    $scope.$apply();
+                })
+                .fail(function () {
+                    alert("Error");
+                });
+        }
+    }
 
-</body>
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 
 </html>
