@@ -81,6 +81,42 @@ app.get("/CreateShipping", function(req, res) {
             }
 });
 
+app.get("/CreateShopper", function(req, res) {
+    try {
+        var mongodb = require('mongodb');
+        var MongoClient = mongodb.MongoClient;
+            res.header("Access-Control-Allow-Origin", "*");
+            if(!req.query.bookTitle) {
+                return res.send({"result": "missing the Book Title"});
+            } else {
+                var cart = {
+                    "Name": req.query.name,
+                    "Age": req.query.age,
+                    "Address": req.query.address,
+                    "Email": req.query.email,
+                    "Phone Number": req.query.phoneNum
+                }
+    
+                var url = 'mongodb://localhost:27017';
+                MongoClient.connect(url, function (err, client) {
+                    if (err) {
+                        return res.send({"result" : "failed"});
+                      }  else {
+                        var db = client.db('StoreFront');
+                        var collection = db.collection('shopper');
+                            collection.insertOne (cart, function(err, res) {
+                                if (err) throw err;
+                                client.close();
+                            });
+                            return res.send (cart);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error(error);
+            }
+});
+
 app.get("/CreateBilling", function (req, res) {
     try {
         var mongodb = require('mongodb');
