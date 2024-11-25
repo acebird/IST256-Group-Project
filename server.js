@@ -156,6 +156,41 @@ app.get("/CreateBilling", function (req, res) {
             }
 });
 
+app.get("/UpdateShipping", function(req, res) {
+    try {
+        var mongodb = require('mongodb');
+        var MongoClient = mongodb.MongoClient;
+            res.header("Access-Control-Allow-Origin", "*");
+            if(!req.query.bookTitle) {
+                return res.send({"result": "missing the Book Title"});
+            } else {
+                var url = 'mongodb://localhost:27017';
+                MongoClient.connect(url, function (err, client) {
+                    if (err) {
+                        return res.send({"result" : "failed"});
+                      }  else {
+                        var db = client.db('StoreFront');
+                        var collection = db.collection('shopper');
+                        const query = {"Product ID": req.query.productID};
+                        var shipping = { $set: {
+                            "Destination": req.query.shipdest,
+                            "Carrier": req.query.shipcarrier,
+                            "Shipping Method": req.query.shipmethod
+                        }
+                        };
+                            collection.updateOne (query,newvalues, function(err, res) {
+                                if (err) throw err;
+                                client.close();
+                            });
+                            return res.send (cart);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error(error);
+            }
+});
+
 const PORT = 3000;
 server.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
