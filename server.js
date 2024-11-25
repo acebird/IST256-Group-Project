@@ -2,52 +2,46 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const server = http.createServer((req, res) => {
-    if (req.url.startsWith('/product.json/')) {
+var express = require("express");
+var app = express();
+var bodyParser = require("body-parser")
+app.use(bodyParser.urlencoded({ extended: false}))
+app.use(bodyParser.json())
 
-        const id = parseInt(req.url.split('/').pop());
-        fs.readFile(path.join(__dirname, 'product.json'), (err, content) => {
-            if (err) {
-                res.writeHead(500);
-                res.end('Server Error');
-                return;
-            }
-            const products = JSON.parse(content);
-            const product = products.find(p => p.ProductID === id);
-            if (product) {
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify(product));
+
+app.get("/CreateShoppingCart", function(req, res) {
+    try {
+        var mongodb = require('mongodb');
+        var MongoClient = mongodb.MongoClient;
+            res.header("Access-Control-Allow-Origin", "*");
+            if(!req.query.bookTitle) {
+                return res.send({"result": "missing the Book Title"});
             } else {
-                res.writeHead(404, { 'Content-Type': 'text/plain' });
-                res.end('Product not found');
+                var cart = {
+                    "Product ID": req.query.productid,
+                    "Product Category": req.query.productcategory,
+                    "Product Price": req.query.productprice
+                }
+    
+                var url = 'mongodb://localhost:27017';
+                MongoClient.connect(url, function (err, client) {
+                    if (err) {
+                        return res.send({"result" : "failed"});
+                      }  else {
+                        var db = client.db('StoreFront');
+                        var collection = db.collection('shopping cart');
+                            collection.insertOne (cart, function(err, res) {
+                                if (err) throw err;
+                                client.close();
+                            });
+                            return res.send (cart);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error(error);
             }
-        });
-    } else {
-        let filePath = path.join(__dirname, req.url === '/' ? 'shoppingcart.html' : req.url);
-        const extname = path.extname(filePath);
-        let contentType = 'text/html';
-        switch (extname) {
-            case '.js':
-                contentType = 'text/javascript';
-                break;
-            case '.css':
-                contentType = 'text/css';
-                break;
-            case '.json':
-                contentType = 'application/json';
-                break;
-        }
-        fs.readFile(filePath, (err, content) => {
-            if (err) {
-                res.writeHead(404, { 'Content-Type': 'text/html' });
-                res.end('<h1>404 Not Found</h1>', 'utf8');
-            } else {
-                res.writeHead(200, { 'Content-Type': contentType });
-                res.end(content, 'utf8');
-            }
-        });
-    }
-});
+    });
 
 const PORT = 3000;
 server.listen(PORT, () => {
