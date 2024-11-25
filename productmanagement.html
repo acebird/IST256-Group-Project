@@ -125,15 +125,32 @@
                 "ProductWeight": productWeight ? parseFloat(productWeight) : null
             }
 
-            console.log('Form Data Submitted:', JSON.stringify(productJSON));
+            function Ctrl($scope){
+                    $scope.submit = function () {
+                        // Make sure to change the host and port to match the URL
+                        var query = "http://localhost:3000/CreateProduct?";
 
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'C:/Users/acebi/Documents/GitHub/IST256-Group-Project/product.json', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
+                        query += "ID=" + $scope.productid;
+                        query += "&Description=" + $scope.productdescription;
+                        query += "&Category=" + $scope.productcategory;
+                        query += "&Price=" + $scope.productprice;
+                        query += "&Measure=" + $scope.measure;
+                        query += "&Price=" + $scope.productprice;
+                        query += "&Weight=" + $scope.productweight;
 
-            xhr.send(productJSON);
+                        $scope.request = query;
+                        $scope.$apply();
 
-            alert('Form submitted successfully!');
+                        $.ajax({ url: query, crossDomain: true, dataType: 'json', type: 'GET'})
+                            .done(function (json) {
+                                $scope.response = json.result;
+                                $scope.$apply();
+                            })
+                            .fail(function () {
+                                alert("Error");
+                            });
+                    }
+                }
         });
     </script>
 </body>
