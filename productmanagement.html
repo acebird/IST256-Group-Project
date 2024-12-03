@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-ng-app="storeApp">
+<html lang="en" data-ng-app="productApp">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -75,8 +75,7 @@
     </div>
 
     <script>
-        // AngularJS app and controller
-        angular.module('storeApp', [])
+        angular.module('productApp', [])
             .controller('Ctrl', ['$scope', '$http', function ($scope, $http) {
                 $scope.product = {};
                 $scope.response = '';
