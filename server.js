@@ -63,29 +63,40 @@ app.get("/CreateShipping", function(req, res) {
         var mongodb = require('mongodb');
         var MongoClient = mongodb.MongoClient;
             res.header("Access-Control-Allow-Origin", "*");
-            if(!req.query.bookTitle) {
-                return res.send({"result": "missing the Book Title"});
+            if(!req.query.productid) {
+                return res.send({"result": "missing the Product ID"});
             } else {
-                var cart = {
+                var shipping = {
                     "Product ID": req.query.productid,
-                    "Product Category": req.query.productcategory,
-                    "Product Price": req.query.productprice
+                    "Shopper Name": req.query.name,
+                    "Shipping Destination": req.query.shipdest,
+                    "Shipping Carrier": req.query.shipcarrier,
+                    "Shipping Method": req.query.shipmethod
                 }
-    
-                var url = 'mongodb://localhost:27017';
-                MongoClient.connect(url, function (err, client) {
-                    if (err) {
-                        return res.send({"result" : "failed"});
-                      }  else {
-                        var db = client.db('StoreFront');
-                        var collection = db.collection('shopping cart');
-                            collection.insertOne (cart, function(err, res) {
-                                if (err) throw err;
-                                client.close();
-                            });
-                            return res.send (cart);
-                        }
-                    });
+
+                async function insertDocument() {
+                    const client = new MongoClient(url);
+                
+                    try {
+                
+                        await client.connect();
+                
+                        const dbo = client.db("StoreFront");
+                
+                        const result = await dbo.collection("shipping").insertOne(shipping);
+                        res.send(result);
+                
+                        res.send("Added Ship Info")
+                    } catch (err) {
+                        console.error("Error connecting to MongoDB:", err);
+                    } finally {
+                
+                        await client.close();
+                    }
+                }
+                
+                insertDocument();
+                
                 }
             } catch (error) {
                 console.error(error);
