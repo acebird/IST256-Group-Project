@@ -8,14 +8,16 @@ var bodyParser = require("body-parser")
 app.use(bodyParser.urlencoded({ extended: false}))
 app.use(bodyParser.json())
 
+const { MongoClient } = require('mongodb');
+const url = "mongodb://127.0.0.1:27017/";
 
 app.get("/CreateProduct", function(req, res) {
     try {
         var mongodb = require('mongodb');
         var MongoClient = mongodb.MongoClient;
             res.header("Access-Control-Allow-Origin", "*");
-            if(!req.query.bookTitle) {
-                return res.send({"result": "missing the Book Title"});
+            if(!req.query.productid) {
+                return res.send({"result": "missing ProductId"});
             } else {
                 var product = {
                     "Product ID": req.query.productid,
@@ -27,20 +29,29 @@ app.get("/CreateProduct", function(req, res) {
                     
                 }
     
-                var url = 'mongodb://localhost:27017';
-                MongoClient.connect(url, function (err, client) {
-                    if (err) {
-                        return res.send({"result" : "failed"});
-                      }  else {
-                        var db = client.db('StoreFront');
-                        var collection = db.collection('products');
-                            collection.insertOne (cart, function(err, res) {
-                                if (err) throw err;
-                                client.close();
-                            });
-                            return res.send (cart);
-                        }
-                    });
+                async function insertDocument() {
+                    const client = new MongoClient(url);
+                
+                    try {
+                
+                        await client.connect();
+                
+                        const dbo = client.db("StoreFront");
+                
+                        const result = await dbo.collection("products").insertOne(product);
+                        res.send(result);
+                
+                        res.send("Added Product")
+                    } catch (err) {
+                        console.error("Error connecting to MongoDB:", err);
+                    } finally {
+                
+                        await client.close();
+                    }
+                }
+                
+                insertDocument();
+
                 }
             } catch (error) {
                 console.error(error);
@@ -192,6 +203,6 @@ app.get("/UpdateShipping", function(req, res) {
 });
 
 const PORT = 3000;
-server.listen(PORT, () => {
+app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });

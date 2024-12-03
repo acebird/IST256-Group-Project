@@ -1,18 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" data-ng-app="storeApp">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alpha Web Storefront</title>
 
-   
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="shoppingcart.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"></script>
 </head>
+<body>
 
-<body data-ng-app>
     <div class="banner">
         <div class="banner-text">
             <h1>Alpha Web Storefront</h1>
@@ -27,131 +26,84 @@
         </div>
     </div>
 
-    <div class="container mt-5">
+    <div class="container mt-5" data-ng-controller="Ctrl">
         <h1>Create or Update a Product</h1>
-
-        <form id="productform" data-ng-submit="submit()" data-ng-controller="Ctrl">
+        <form data-ng-submit="submit()">
             <div class="form-group row">
-                <label for="productid" class="col-sm-2 col-form-label">Product ID: </label>
+                <label for="productid" class="col-sm-2 col-form-label">Product ID:</label>
                 <div class="col-sm-10">
-                    <input id="productid" class="form-control" placeholder="Product Id" maxlength="25" required>
+                    <input data-ng-model="product.productid" id="productid" class="form-control" placeholder="Product Id" maxlength="25" required>
                 </div>
             </div>
             <div class="form-group row">
-                <label for="productdescription" class="col-sm-2 col-form-label">Product Description: </label>
+                <label for="productdescription" class="col-sm-2 col-form-label">Product Description:</label>
                 <div class="col-sm-10">
-                    <input id="productdescription" class="form-control" placeholder="Product Description" maxlength="50">
+                    <input data-ng-model="product.productdescription" id="productdescription" class="form-control" placeholder="Product Description" maxlength="50">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="productcategory" class="col-sm-2 col-form-label">Product Category: </label>
+                <label for="productcategory" class="col-sm-2 col-form-label">Product Category:</label>
                 <div class="col-sm-10">
-                    <input id="productcategory" class="form-control" placeholder="Product Category" maxlength="50" required>
+                    <input data-ng-model="product.productcategory" id="productcategory" class="form-control" placeholder="Product Category" maxlength="50" required>
                 </div>
             </div>
             <div class="form-group row">
-                <label for="measure" class="col-sm-2 col-form-label">Product Unit of Measure: </label>
+                <label for="measure" class="col-sm-2 col-form-label">Product Unit of Measure:</label>
                 <div class="col-sm-10">
-                    <input id="measure" class="form-control" placeholder="Unit of Measure" maxlength="25" required>
+                    <input data-ng-model="product.measure" id="measure" class="form-control" placeholder="Unit of Measure" maxlength="25" required>
                 </div>
             </div>
             <div class="form-group row">
-                <label for="productprice" class="col-sm-2 col-form-label">Product Price: </label>
+                <label for="productprice" class="col-sm-2 col-form-label">Product Price:</label>
                 <div class="col-sm-10">
-                    <input id="productprice" class="form-control" placeholder="Product Price" maxlength="25" required>
+                    <input data-ng-model="product.productprice" id="productprice" class="form-control" placeholder="Product Price" maxlength="25" required>
                 </div>
             </div>
             <div class="form-group row">
-                <label for="productweight" class="col-sm-2 col-form-label">Product Weight: </label>
+                <label for="productweight" class="col-sm-2 col-form-label">Product Weight:</label>
                 <div class="col-sm-10">
-                    <input id="productweight" class="form-control" placeholder="Product Weight" maxlength="25">
+                    <input data-ng-model="product.productweight" id="productweight" class="form-control" placeholder="Product Weight" maxlength="25">
                 </div>
             </div>
-        
             <div class="form-group row">
                 <div class="col-sm-10 offset-sm-2">
-                    <input id="submit" type="submit" class="btn btn-primary" value="Submit">
+                    <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </div>
         </form>
+        <p>{{ response }}</p>
     </div>
+
     <script>
-        document.getElementById('productform').addEventListener('submit', function (event) {
-            event.preventDefault();
-            
-            let productID = document.getElementById('productid').value;
-            if (!/^[a-zA-Z0-9]+$/.test(productID)) {
-                alert('Product ID must be alphanumeric.');
-                return;
-            }
+        // AngularJS app and controller
+        angular.module('storeApp', [])
+            .controller('Ctrl', ['$scope', '$http', function ($scope, $http) {
+                $scope.product = {};
+                $scope.response = '';
 
-            let productDescription = document.getElementById('productdescription').value;
-            if (productDescription.length < 5 || productDescription.length > 50) {
-                alert('Product Description must be between 5 and 50 characters.');
-                return;
-            }
+                $scope.submit = function () {
+                    const query = {
+                        productid: $scope.product.productid,
+                        productdescription: $scope.product.productdescription,
+                        productcategory: $scope.product.productcategory,
+                        measure: $scope.product.measure,
+                        productprice: $scope.product.productprice,
+                        productweight: $scope.product.productweight,
+                    };
 
-            let productCategory = document.getElementById('productcategory').value;
-            if (productCategory === '') {
-                alert('Product Category is required.');
-                return;
-            }
-
-            let measure = document.getElementById('measure').value;
-            if (measure === '') {
-                alert('Unit of Measure is required.');
-                return;
-            }
-
-            let productPrice = document.getElementById('productprice').value;
-            if (isNaN(productPrice) || parseFloat(productPrice) <= 0) {
-                alert('Product Price must be a positive number.');
-                return;
-            }
-
-            let productWeight = document.getElementById('productweight').value;
-            if (productWeight !== '' && (isNaN(productWeight) || parseFloat(productWeight) <= 0)) {
-                alert('Product Weight must be a positive number.');
-                return;
-            }
-            alert('Form submitted successfully!');
-
-            let productJSON = {
-                "ProductID" : productID,
-                "ProductDescription": productDescription,
-                "ProductCategory": productCategory,
-                "Measure": measure,
-                "ProductPrice": parseFloat(productPrice),
-                "ProductWeight": productWeight ? parseFloat(productWeight) : null
-            }
-
-            function Ctrl($scope){
-                    $scope.submit = function () {
-                        // Make sure to change the host and port to match the URL
-                        var query = "http://localhost:3000/CreateProduct?";
-
-                        query += "ID=" + $scope.productid;
-                        query += "&Description=" + $scope.productdescription;
-                        query += "&Category=" + $scope.productcategory;
-                        query += "&Measure=" + $scope.measure;
-                        query += "&Price=" + $scope.productprice;
-                        query += "&Weight=" + $scope.productweight;
-
-                        $scope.request = query;
-                        $scope.$apply();
-
-                        $.ajax({ url: query, crossDomain: true, dataType: 'json', type: 'GET'})
-                            .done(function (json) {
-                                $scope.response = json.result;
-                                $scope.$apply();
-                            })
-                            .fail(function () {
-                                alert("Error");
-                            });
-                    }
-                }
-        });
+                    $http({
+                        method: 'GET',
+                        url: 'http://localhost:3000/CreateProduct',
+                        params: query,
+                    }).then(function (response) {
+                        $scope.response = 'Product added successfully!';
+                        console.log(response.data);
+                    }).catch(function (error) {
+                        $scope.response = 'Error adding product.';
+                        console.error(error);
+                    });
+                };
+            }]);
     </script>
 </body>
-
 </html>
