@@ -148,74 +148,43 @@ app.get("/CreateShopper", function(req, res) {
             }
 });
 
-app.get("/CreateBilling", function (req, res) {
-    try {
-        var mongodb = require('mongodb');
-        var MongoClient = mongodb.MongoClient;
-
-        res.header("Access-Control-Allow-Origin", "*");
-
-        if(!req.query.bookTitle) {
-                return res.send({"result": "missing the Book Title"});
-
-        var billing = {
-            "Name": req.query.name,
-            "Address": req.query.address,
-            "State": req.query.state,
-            "Email": req.query.email,
-            "Phone": req.query.phoneNum 
-        };
-
-        var url = 'mongodb://localhost:27017';
-
-       MongoClient.connect(url, function (err, client) {
-                    if (err) {
-                        return res.send({"result" : "failed"});
-                      }  else {
-                        var db = client.db('StoreFront');
-                        var collection = db.collection('billing');
-                            collection.insertOne (cart, function(err, res) {
-                                if (err) throw err;
-                                client.close();
-                            });
-                            return res.send (cart);
-                        }
-                    });
-                }
-            } catch (error) {
-                console.error(error);
-            }
-});
-
-app.get("/UpdateShipping", function(req, res) {
+app.get("/CreateBilling", function(req, res) {
     try {
         var mongodb = require('mongodb');
         var MongoClient = mongodb.MongoClient;
             res.header("Access-Control-Allow-Origin", "*");
-            if(!req.query.bookTitle) {
-                return res.send({"result": "missing the Book Title"});
+            if(!req.query.name) {
+                return res.send({"result": "missing User's Name"});
             } else {
-                var url = 'mongodb://localhost:27017';
-                MongoClient.connect(url, function (err, client) {
-                    if (err) {
-                        return res.send({"result" : "failed"});
-                      }  else {
-                        var db = client.db('StoreFront');
-                        var collection = db.collection('shopper');
-                        const query = {"Product ID": req.query.productID};
-                        var shipping = { $set: {
-                            "Destination": req.query.shipdest,
-                            "Carrier": req.query.shipcarrier,
-                            "Shipping Method": req.query.shipmethod
-                        }
-                        };
-                            collection.updateOne (query,newvalues, function(err, res) {
-                                if (err) throw err;
-                                client.close();
-                            });
-                            return res.send (cart);
-                        }
-                    });
+                var billing = {
+                    "Name": req.query.name,
+                    "Address": req.query.address,
+                    "State": req.query.state
+                }
+    
+                async function insertDocument() {
+                    const client = new MongoClient(url);
+                
+                    try {
+                
+                        await client.connect();
+                
+                        const dbo = client.db("StoreFront");
+                
+                        const result = await dbo.collection("billing").insertOne(billing);
+                        res.send(result);
+                
+                        res.send("Added Billing")
+                    } catch (err) {
+                        console.error("Error connecting to MongoDB:", err);
+                    } finally {
+                
+                        await client.close();
+                    }
+                }
+                
+                insertDocument();
+
                 }
             } catch (error) {
                 console.error(error);
@@ -232,7 +201,7 @@ app.get("/AddToCart", function(req, res) {
             } else {
                 var product = {
                     "Product ID": req.query.productid,
-                    "Product Category": req.query.productcategory,
+                    "Product Category": req.query.category,
                     "ProductPrice": req.query.price,
                 }
     
@@ -246,6 +215,48 @@ app.get("/AddToCart", function(req, res) {
                         const dbo = client.db("StoreFront");
                 
                         const result = await dbo.collection("shoppingcart").insertOne(product);
+                        res.send(result);
+                
+                        res.send("Added Product")
+                    } catch (err) {
+                        console.error("Error connecting to MongoDB:", err);
+                    } finally {
+                
+                        await client.close();
+                    }
+                }
+                
+                insertDocument();
+
+                }
+            } catch (error) {
+                console.error(error);
+            }
+});
+
+app.get("/CreateReturn", function(req, res) {
+    try {
+        var mongodb = require('mongodb');
+        var MongoClient = mongodb.MongoClient;
+            res.header("Access-Control-Allow-Origin", "*");
+            if(!req.query.return) {
+                return res.send({"result": "missing ProductId"});
+            } else {
+                var product = {
+                    "Product ID": req.query.return,
+                    "Name": req.query.name
+                }
+    
+                async function insertDocument() {
+                    const client = new MongoClient(url);
+                
+                    try {
+                
+                        await client.connect();
+                
+                        const dbo = client.db("StoreFront");
+                
+                        const result = await dbo.collection("returns").insertOne(product);
                         res.send(result);
                 
                         res.send("Added Product")
