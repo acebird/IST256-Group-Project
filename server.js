@@ -222,6 +222,86 @@ app.get("/UpdateShipping", function(req, res) {
             }
 });
 
+app.get("/AddToCart", function(req, res) {
+    try {
+        var mongodb = require('mongodb');
+        var MongoClient = mongodb.MongoClient;
+            res.header("Access-Control-Allow-Origin", "*");
+            if(!req.query.productid) {
+                return res.send({"result": "missing ProductId"});
+            } else {
+                var product = {
+                    "Product ID": req.query.productid,
+                    "Product Category": req.query.productcategory,
+                    "ProductPrice": req.query.price,
+                }
+    
+                async function insertDocument() {
+                    const client = new MongoClient(url);
+                
+                    try {
+                
+                        await client.connect();
+                
+                        const dbo = client.db("StoreFront");
+                
+                        const result = await dbo.collection("shoppingcart").insertOne(product);
+                        res.send(result);
+                
+                        res.send("Added Product")
+                    } catch (err) {
+                        console.error("Error connecting to MongoDB:", err);
+                    } finally {
+                
+                        await client.close();
+                    }
+                }
+                
+                insertDocument();
+
+                }
+            } catch (error) {
+                console.error(error);
+            }
+});
+
+app.get("/GetProductByID", function(req, res) {
+    try {
+        res.header("Access-Control-Allow-Origin", "*");
+        var productid = req.query.productid;
+
+        if (!productid) {
+            return res.send({"result": "missing ProductId"});
+        }
+
+        async function fetchProduct() {
+            const client = new MongoClient(url);
+            try {
+                await client.connect();
+                const dbo = client.db("StoreFront");
+                const product = await dbo.collection("products").findOne({"Product ID": productid});
+
+                if (product) {
+                    res.send(product);
+                } else {
+                    res.send({"result": "Product not found"});
+                }
+            } catch (err) {
+                console.error("Error fetching product:", err);
+                res.send({"result": "Error fetching product"});
+            } finally {
+                await client.close();
+            }
+        }
+        fetchProduct();
+    } catch (error) {
+        console.error(error);
+        res.send({"result": "Server error"});
+    }
+});
+
+
+
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
